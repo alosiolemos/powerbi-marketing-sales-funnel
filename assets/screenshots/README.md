@@ -5,8 +5,6 @@ Pasta preparada para receber as imagens revisadas. Nenhuma captura original foi 
 | Nome sugerido | Conteúdo |
 | --- | --- |
 | 01-visao-geral.png | Visão geral do funil |
-| 02-acompanhamento.png | Contatos e reuniões |
-| 03-motivos-perda.png | Detalhamento de perdas |
 
 Use capturas de uma cópia com dados fictícios, identidade visual adaptada e sem informações pessoais ou internas. Revise filtros, rótulos e dicas de ferramenta.
 
