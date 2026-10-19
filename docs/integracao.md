@@ -37,6 +37,125 @@ No padrão histórico apresentado, `has-more` informa se existe uma próxima pá
 
 Paginação e atualização incremental são conceitos diferentes: paginação percorre blocos de uma resposta; atualização incremental restringe a atualização a determinadas faixas de dados.
 
+## Implementação histórica: conexão, função e aplicação
+
+Os trechos abaixo reconstituem o padrão explicado pelo autor, com parâmetros genéricos. O endereço público do HubSpot foi mantido; lista, token, propriedades específicas e regras internas não são fornecidos.
+
+**Contexto de versão:** o endpoint `/contacts/v1/lists/{list_id}/contacts/all` pertence à Contact Lists API v1. A HubSpot anunciou a retirada dos endpoints de listas v1, com exceções que não incluem este endpoint de lista específica, em **30 de abril de 2026**. Portanto, estes trechos documentam a construção histórica e não devem ser usados como instrução de conexão atual. Veja o [comunicado oficial da HubSpot](https://developers.hubspot.com/changelog/extension-contact-lists-api-v1-sunset-moved-to-april-30-2026). Uma retomada exige migração para a API vigente.
+
+### 1. Parâmetros e conexão
+
+No projeto real, a consulta recebia autenticação e configuração da fonte. Nesta versão, `pListaId` e `pTokenHubSpot` representam parâmetros de texto não distribuídos. Não coloque valores reais no repositório. A referência ao token ilustra o cabeçalho histórico; não é uma recomendação de armazenamento de segredos em arquivos M.
+
+A função `fxnexDados` recebe um deslocamento, monta a requisição e retorna um registro M obtido do JSON.
+
+```powerquery
+// Reprodução didática do padrão histórico. Endpoint de lista v1 descontinuado.
+// Parâmetros de texto esperados: pListaId e pTokenHubSpot.
+// Nenhum valor real desses parâmetros é distribuído.
+(vidOffset as text) as record =>
+let
+    Resposta = Json.Document(
+        Web.Contents(
+            "https://api.hubapi.com",
+            [
+                RelativePath = "contacts/v1/lists/" & pListaId & "/contacts/all",
+                Query = [
+                    count = "100",
+                    propertyMode = "value_and_history",
+                    vidOffset = vidOffset
+                ],
+                Headers = [
+                    Authorization = "Bearer " & pTokenHubSpot
+                ]
+            ]
+        )
+    )
+in
+    Resposta
+```
+
+`Web.Contents` faz a requisição; `RelativePath` compõe o caminho; `Query` fornece os parâmetros; `Json.Document` interpreta a resposta. Foi usado um tamanho ilustrativo de 100 registros por página, sem afirmar que esse era o tamanho original.
+
+Arquivo: [historico/fxnexDados.m](../power-query/historico/fxnexDados.m).
+
+### 2. Função de próxima página
+
+A função `fxnextPage` consulta os metadados da resposta. Havendo mais registros, retorna o próximo deslocamento; caso contrário, retorna `null`.
+
+```powerquery
+// Função histórica adaptada: null representa o fim da paginação.
+(vidOffset as text) as nullable text =>
+let
+    Resposta = fxnexDados(vidOffset),
+    ProximoDeslocamento =
+        if Resposta[#"has-more"] then
+            Text.From(Resposta[#"vid-offset"])
+        else
+            null
+in
+    ProximoDeslocamento
+```
+
+Arquivo: [historico/fxnextPage.m](../power-query/historico/fxnextPage.m).
+
+### 3. List.Generate e aplicação da função
+
+A consulta `Contatos` gera os deslocamentos e os transforma em tabela. Em seguida, **Adicionar coluna → Invocar função personalizada** corresponde à etapa `Table.AddColumn`: para cada deslocamento, aplica `fxnexDados`.
+
+```powerquery
+// Consulta histórica adaptada. Depende de fxnextPage e fxnexDados.
+// Não executar contra a API atual: o endpoint de listas v1 foi descontinuado.
+let
+    Deslocamentos = List.Generate(
+        () => "0",
+        each _ <> null,
+        each fxnextPage(_)
+    ),
+    TabelaDeslocamentos = Table.FromList(
+        Deslocamentos,
+        Splitter.SplitByNothing(),
+        {"Deslocamento"}
+    ),
+    FuncaoAplicada = Table.AddColumn(
+        TabelaDeslocamentos,
+        "Resposta",
+        each fxnexDados([Deslocamento]),
+        type record
+    ),
+    ListasContatos = List.Transform(
+        FuncaoAplicada[Resposta],
+        each Record.Field(_, "contacts")
+    ),
+    ContatosConsolidados = List.Combine(ListasContatos),
+    Resultado = Table.FromRecords(ContatosConsolidados)
+in
+    Resultado
+```
+
+Arquivo: [historico/Contatos.m](../power-query/historico/Contatos.m).
+
+### 4. Leitura das etapas
+
+| Etapa | Entrada | Saída |
+| --- | --- | --- |
+| Deslocamentos | Deslocamento inicial e função de paginação | Lista de referências de continuação |
+| TabelaDeslocamentos | Lista de referências | Uma linha por deslocamento |
+| FuncaoAplicada | Cada linha da tabela | Registro JSON interpretado de cada página |
+| ListasContatos | Respostas das páginas | Listas do campo contacts |
+| ContatosConsolidados | Listas das páginas | Uma lista reunindo os contatos |
+| Resultado | Lista de contatos | Tabela para transformação posterior |
+
+A tabela final conserva campos estruturados, como propriedades em registros, quando presentes. A expansão desses campos e as regras específicas do negócio permanecem reservadas.
+
+### O que foi adaptado
+
+- No trecho original apresentado, a função de paginação repetia a requisição. Aqui ela reutiliza `fxnexDados` para centralizar a construção da conexão.
+- O trecho original iniciava a lista com `"1"` e usava `"0"` para encerrar. O exemplo adaptado começa com `"0"` e usa `null` para encerrar, separando o deslocamento inicial do sinal de término.
+- A consulta original enviada estava incompleta. As etapas de aplicação e consolidação acima são uma reconstrução didática, e não uma transcrição validada do projeto completo.
+- Esse padrão pode consultar uma página tanto para descobrir a próxima referência quanto para obter seus dados. Não há promessa de uma única requisição por página. O exemplo demonstrativo anterior mostra como percorrer diretamente as respostas.
+- Os trechos históricos não foram executados contra o HubSpot; a demonstração com dados fictícios continua sendo a alternativa para experimentar o conceito sem conexão.
+
 ## Exemplo público em Power Query
 
 A função [fxPaginarContatos.m](../power-query/fxPaginarContatos.m) é uma adaptação didática criada para este portfólio. Ela recebe uma função de obtenção da página como parâmetro, percorre as respostas e retorna uma lista consolidada.

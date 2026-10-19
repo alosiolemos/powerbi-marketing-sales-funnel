@@ -1,5 +1,11 @@
 # Histórico de alterações
 
+## 0.3.0 — 2026-10-19
+
+- Passo a passo da integração histórica: requisição, próxima página e aplicação da função.
+- Exemplos em M parametrizados, sem identificadores ou credenciais reais.
+- Registro da descontinuação do endpoint legado e das adaptações didáticas.
+
 ## 0.2.0 — 2026-10-19
 
 - Diagrama do fluxo de dados e detalhamento da paginação.

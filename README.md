@@ -64,7 +64,9 @@ A leitura por período depende dos filtros e relacionamentos do modelo. Este exe
 
 A integração histórica utilizava funções para descobrir a próxima página e obter seus dados. Uma lista de deslocamentos orientava as consultas, que alimentavam a transformação e o modelo.
 
-Veja o [fluxo interno, a explicação e a função demonstrativa](docs/integracao.md). O exemplo público utiliza dados fictícios, sem API ou credenciais, e ilustra a paginação sem expor a integração completa.
+Veja o [fluxo interno e o passo a passo da conexão histórica](docs/integracao.md), incluindo requisição ao HubSpot, função de próxima página, `List.Generate` e aplicação da função. O endpoint legado está identificado como descontinuado; os exemplos não representam uma conexão atual validada.
+
+Consulte também a [função demonstrativa sem conexão](power-query/fxPaginarContatos.m). O exemplo público utiliza dados fictícios, sem API ou credenciais, e ilustra a paginação sem expor a integração completa.
 
 ## Telas
 
