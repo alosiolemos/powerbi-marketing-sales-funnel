@@ -1,0 +1,72 @@
+// Exemplos independentes de medidas: copie uma expressão por vez no modelo adequado.
+// Dependem de tabelas, colunas e relacionamentos não distribuídos neste pacote.
+// <ID_PIPELINE> substitui o identificador interno do projeto de referência.
+
+// Medida: LEADS
+LEADS =
+CALCULATE(
+                    DISTINCTCOUNT(hs_Contatos_Hub[Contact ID]),
+                                  hs_Contatos_Hub[Data de Envio do Formulário]<>BLANK(), hs_Contatos_Hub[Validação]="Não")+0
+
+// Medida: MQL
+MQL =
+CALCULATE(
+                    CALCULATE(
+                        DISTINCTCOUNT(hs_Contatos_Hub[Contact ID]),
+                                                hs_Contatos_Hub[Data que virou MQL]<>BLANK(),
+                                                    USERELATIONSHIP(hs_Contatos_Hub[Data que virou MQL],dCalendario[Date]))+0)
+
+// Medida: SQL
+SQL =
+CALCULATE(
+                    CALCULATE(
+                        DISTINCTCOUNT(hs_Contatos_Hub[Contact ID]),
+                            hs_Contatos_Hub[Data que virou SQL]<>BLANK(),
+                                    USERELATIONSHIP(hs_Contatos_Hub[Data que virou SQL],dCalendario[Date]))+0
+    )
+
+// Medida: Qtd Diagnósitcos Agendados
+Qtd Diagnósitcos Agendados =
+CALCULATE(
+                                        CALCULATE(
+                                            DISTINCTCOUNT('hs_Negócios_Contatos'[id]),
+                                                'hs_Negócios_Contatos'[pipeline]="<ID_PIPELINE>",
+                                                USERELATIONSHIP(dCalendario[Date],'hs_Negócios_Contatos'[createdate]))+0)
+
+// Medida: Qtd Diagnosticos Realizados
+Qtd Diagnosticos Realizados =
+CALCULATE(
+                        DISTINCTCOUNT('hs_Negócios_Contatos'[id]),
+                            'hs_Negócios_Contatos'[pipeline]="<ID_PIPELINE>",
+                            'hs_Negócios_Contatos'[data_do_diagnostico]<>BLANK(),
+                                USERELATIONSHIP(dCalendario[Date],'hs_Negócios_Contatos'[data_do_diagnostico]))+0
+
+// Medida: Qtd Contrato Fech.
+Qtd Contrato Fech. =
+CALCULATE(
+                        DISTINCTCOUNT('hs_Negócios_Contatos'[id]),
+                            'hs_Negócios_Contatos'[pipeline]="<ID_PIPELINE>",
+                            'hs_Negócios_Contatos'[data_de_contrato_assinado]<>BLANK(),
+                                USERELATIONSHIP(dCalendario[Date],'hs_Negócios_Contatos'[data_de_contrato_assinado]))+0
+
+// Medida: Qtd_Motivo de Perda total
+Qtd_Motivo de Perda total =
+CALCULATE(
+                    [LEADS],
+                        hs_Contatos_Hub[destino_do_lead.value]="Lead perdido")
+
+// Medida: Qtd Propostas apresentadas
+Qtd Propostas apresentadas =
+CALCULATE(
+                        DISTINCTCOUNT('hs_Negócios_Contatos'[id]),
+                            'hs_Negócios_Contatos'[pipeline]="<ID_PIPELINE>",
+                            'hs_Negócios_Contatos'[data_da_apresentacao_de_proposta]<>BLANK(),
+                                USERELATIONSHIP(dCalendario[Date],'hs_Negócios_Contatos'[data_da_apresentacao_de_proposta]))+0
+
+// Medida: Qtd Aceite Formal
+Qtd Aceite Formal =
+CALCULATE(
+            DISTINCTCOUNT('hs_Negócios_Contatos'[id]),
+                'hs_Negócios_Contatos'[pipeline]="<ID_PIPELINE>",
+                'hs_Negócios_Contatos'[data_do_aceite_formal]<>BLANK(),
+                    USERELATIONSHIP(dCalendario[Date],'hs_Negócios_Contatos'[data_do_aceite_formal]))+0

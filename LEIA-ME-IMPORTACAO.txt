@@ -1,0 +1,16 @@
+IMPORTAÇÃO PELO SITE DO GITHUB
+
+Nome sugerido: powerbi-marketing-sales-funnel
+Descrição sugerida: Case de BI com Power BI, DAX e integração histórica com HubSpot para análise do funil de marketing e vendas.
+
+1. Extraia o ZIP, se estiver usando o pacote compactado.
+2. Crie um repositório vazio no GitHub com o nome sugerido ou outro de sua preferência.
+3. Selecione a opção de envio de arquivos (uploading an existing file / Upload files).
+4. Envie o CONTEÚDO da pasta marketing-funnel-powerbi, incluindo docs, dax e assets. O README.md deve ficar na raiz do repositório.
+5. Use a mensagem: Adiciona documentação inicial do funil de marketing e vendas.
+6. Confirme o envio e confira o README e os links.
+
+O ZIP serve para transporte: não envie apenas o ZIP ao repositório.
+Ative itens ocultos no Explorador para incluir .gitignore e .gitattributes.
+
+O pacote contém documentação e exemplos DAX. As capturas revisadas ainda serão adicionadas; não há PBIP executável.
