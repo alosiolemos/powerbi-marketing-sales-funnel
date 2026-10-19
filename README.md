@@ -25,11 +25,46 @@ MQL significa lead qualificado pelo marketing; SQL significa lead qualificado pa
 
 ## Visão técnica
 
-API do HubSpot → extração paginada em Power Query → transformação e modelo semântico → medidas DAX → relatório Power BI.
+```mermaid
+flowchart LR
+    A["API do HubSpot"] --> B["Power Query: paginação"]
+    B --> C["Transformação dos dados"]
+    C --> D["Modelo semântico"]
+    D --> E["Medidas DAX"]
+    E --> F["Painel de marketing e vendas"]
+```
 
 A integração histórica usa funções em M para percorrer páginas da API e obter os dados de contatos. O relatório também acompanha negócios e a conversão em clientes, conforme o briefing do autor.
 
 O inventário do projeto de referência identificou **16 páginas, 203 medidas e 37 relacionamentos**. Esta edição apresenta nove medidas cujos nomes aparecem nas definições do relatório.
+
+## Exemplos técnicos em destaque
+
+### DAX: quantidade de MQL por data de qualificação
+
+Esta medida do projeto conta contatos distintos com data de MQL preenchida e utiliza essa data no relacionamento com o calendário.
+
+```dax
+MQL =
+CALCULATE(
+    CALCULATE(
+        DISTINCTCOUNT(hs_Contatos_Hub[Contact ID]),
+        hs_Contatos_Hub[Data que virou MQL] <> BLANK(),
+        USERELATIONSHIP(
+            hs_Contatos_Hub[Data que virou MQL],
+            dCalendario[Date]
+        )
+    ) + 0
+)
+```
+
+A leitura por período depende dos filtros e relacionamentos do modelo. Este exemplo exige as tabelas e colunas referenciadas.
+
+### Power Query: obtenção de contatos com paginação
+
+A integração histórica utilizava funções para descobrir a próxima página e obter seus dados. Uma lista de deslocamentos orientava as consultas, que alimentavam a transformação e o modelo.
+
+Veja o [fluxo interno, a explicação e a função demonstrativa](docs/integracao.md). O exemplo público utiliza dados fictícios, sem API ou credenciais, e ilustra a paginação sem expor a integração completa.
 
 ## Telas
 
@@ -41,6 +76,8 @@ As capturas para publicação serão adicionadas em [assets/screenshots](assets/
 - [Integração histórica com o HubSpot](docs/integracao.md)
 - [Principais medidas e regras de cálculo](docs/medidas-dax.md)
 - [Código DAX selecionado](dax/medidas-funil.dax)
+- [Função demonstrativa em Power Query](power-query/fxPaginarContatos.m)
+- [Demonstração com páginas fictícias](power-query/demo-paginacao.m)
 - [Histórico de alterações](CHANGELOG.md)
 
 ## Sobre esta edição
