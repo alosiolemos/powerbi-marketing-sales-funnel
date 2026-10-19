@@ -16,5 +16,6 @@ Depois de adicionar as imagens, inclua referências no README principal, por exe
 ![Visão geral do funil](assets/screenshots/01-visao-geral.png)
 ```
 
-<img width="1466" height="802" alt="01-visao-geral" src="https://github.com/user-attachments/assets/2f94f019-2814-4c41-9260-e81af0f7d8ac" />
+<img width="1457" height="807" alt="01-visao-geral" src="https://github.com/user-attachments/assets/692f29e0-d3d2-4820-b05f-a4d83cccb73d" />
+
 
