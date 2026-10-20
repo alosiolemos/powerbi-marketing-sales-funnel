@@ -34,7 +34,7 @@ flowchart LR
     E --> F["Painel de marketing e vendas"]
 ```
 
-A integração histórica usa funções em M para percorrer páginas da API e obter os dados de contatos. O relatório também acompanha negócios e a conversão em clientes, conforme o briefing do autor.
+Implementei a integração com funções em M para percorrer páginas da API e obter os dados de contatos. No relatório, também acompanhei negócios e a conversão de contatos em clientes.
 
 O inventário do projeto de referência identificou **16 páginas, 203 medidas e 37 relacionamentos**. Esta edição apresenta nove medidas cujos nomes aparecem nas definições do relatório.
 
@@ -86,7 +86,7 @@ As capturas para publicação serão adicionadas em [assets/screenshots](assets/
 
 Este repositório é um estudo de caso documental. Contém explicações e exemplos DAX extraídos do projeto, com identificador de pipeline substituído por um marcador. Os exemplos dependem do modelo original e não são um relatório executável independente.
 
-Não são distribuídos dados reais, credenciais, conexões, cache ou o PBIP original. Segundo o autor, o painel histórico foi descontinuado em 2025 e acompanha informações desde 2021. A extração atual da API e a execução dos cálculos não foram revalidadas nesta edição.
+Não são distribuídos dados reais, credenciais, conexões, cache ou o PBIP original. Desenvolvi o painel para acompanhar informações desde 2021; ele foi descontinuado em 2025. A extração atual da API e a execução dos cálculos não foram revalidadas nesta edição.
 
 ## Minha participação
 
