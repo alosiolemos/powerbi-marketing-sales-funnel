@@ -39,7 +39,7 @@ Paginação e atualização incremental são conceitos diferentes: paginação p
 
 ## Implementação histórica: conexão, função e aplicação
 
-Os trechos abaixo reconstituem o padrão explicado pelo autor, com parâmetros genéricos. O endereço público do HubSpot foi mantido; lista, token, propriedades específicas e regras internas não são fornecidos.
+Os trechos abaixo demonstram o padrão de paginação que utilizei, com parâmetros genéricos. O endereço público do HubSpot foi mantido; lista, token, propriedades específicas e regras internas não são fornecidos.
 
 **Contexto de versão:** o endpoint `/contacts/v1/lists/{list_id}/contacts/all` pertence à Contact Lists API v1. A HubSpot anunciou a retirada dos endpoints de listas v1, com exceções que não incluem este endpoint de lista específica, em **30 de abril de 2026**. Portanto, estes trechos documentam a construção histórica e não devem ser usados como instrução de conexão atual. Veja o [comunicado oficial da HubSpot](https://developers.hubspot.com/changelog/extension-contact-lists-api-v1-sunset-moved-to-april-30-2026). Uma retomada exige migração para a API vigente.
 
