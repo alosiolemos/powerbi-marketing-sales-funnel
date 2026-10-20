@@ -6,7 +6,7 @@ Dar ao time de marketing uma visão da jornada dos leads e do retorno comercial,
 
 ## Escopo histórico
 
-Segundo o briefing do autor, o painel acompanhava informações a partir de 2021 e foi descontinuado em 2025. As frentes incluíam contatos, negócios e contatos convertidos em clientes no HubSpot.
+Desenvolvi o painel para acompanhar informações a partir de 2021, até sua descontinuação em 2025. Trabalhei com contatos, negócios e contatos convertidos em clientes no HubSpot.
 
 As análises contemplavam qualificação, abordagem comercial, reuniões, diagnósticos, propostas, negociação e fechamento. Filtros permitiam observar diferenças por período, origem, fonte e segmento.
 
