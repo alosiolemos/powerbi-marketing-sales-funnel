@@ -70,7 +70,9 @@ Consulte também a [função demonstrativa sem conexão](power-query/fxPaginarCo
 
 ## Telas
 
-As capturas para publicação serão adicionadas em [assets/screenshots](assets/screenshots/README.md), após a substituição de marca e informações comerciais por uma apresentação apropriada ao portfólio.
+Capturas do painel desenvolvido, disponibilizadas para apresentar a experiência visual do projeto.
+
+<img width="1457" height="807" alt="01-visao-geral" src="https://github.com/user-attachments/assets/692f29e0-d3d2-4820-b05f-a4d83cccb73d" />
 
 ## Explore o projeto
 
